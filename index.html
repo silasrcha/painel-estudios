@@ -140,9 +140,11 @@
      medida  dimensão do que ele monta
      forma   p916 | p34 | p11 — só a miniatura do formato
      oque    uma frase do que ele faz
-     online  endereço público. SEM isso o cartão aparece como "em breve":
-             o painel no ar não tem como abrir pasta da máquina de ninguém.
-     pasta   subpasta ao lado, para quando o painel roda local (opcional)
+     online  endereço público. SEM isso o cartão aparece como "em breve".
+
+   Só endereço público, de propósito: o painel existe para os designers, que
+   não têm pasta nenhuma da nossa máquina. Para mexer local, suba o servidor
+   do próprio estúdio.
    =========================================================== */
 const ESTUDIOS = [
   {
@@ -151,8 +153,7 @@ const ESTUDIOS = [
     forma: 'p916',
     oque: 'Monta os cards de agenda sobre foto, com recorte automático da ' +
           'pessoa na frente dos cards.',
-    online: 'https://estudio-cards.vercel.app',
-    pasta: 'Estudio Cards'
+    online: 'https://estudio-cards.vercel.app'
   },
   {
     nome: 'Estúdio de Adesivaços',
@@ -160,33 +161,23 @@ const ESTUDIOS = [
     forma: 'p916',
     oque: 'Monta o card de adesivaço sobre foto: cidade, data, horário e ' +
           'local, com guia do corte 3:4 do feed.',
-    online: '',                       // ← cole aqui a URL quando publicar
-    pasta: 'Estudio Adesivacos'
+    online: ''                        // ← cole aqui a URL quando publicar
   }
 ];
 
-/* Rodando na máquina de alguém o painel também abre a pasta ao lado; no ar,
-   só o endereço público existe. */
-const EH_LOCAL = ['localhost', '127.0.0.1', ''].includes(location.hostname);
 const grade = document.getElementById('grade');
 
 for(const e of ESTUDIOS){
-  const local = e.pasta ? '../' + encodeURIComponent(e.pasta) + '/' : '';
   const c = document.createElement('article');
   c.className = 'cartao';
 
-  let acoes, estado;
-  if(e.online){
-    acoes = '<a class="pri" href="' + e.online + '" target="_blank" rel="noopener">Abrir</a>' +
-            (EH_LOCAL && local ? '<a class="so" href="' + local + '">Local</a>' : '');
-    estado = '<span class="estado"><i></i>No ar</span>';
-  } else if(EH_LOCAL && local){
-    acoes = '<a class="pri" href="' + local + '">Abrir local</a>';
-    estado = '<span class="estado local"><i></i>Ainda não publicado</span>';
-  } else {
-    acoes = '<a class="so" style="flex:1;cursor:default">Em breve</a>';
-    estado = '<span class="estado local"><i></i>Ainda não publicado</span>';
-  }
+  /* sem endereço público não há o que abrir: o cartão fica reservando o lugar */
+  const acoes = e.online
+    ? '<a class="pri" href="' + e.online + '" target="_blank" rel="noopener">Abrir</a>'
+    : '<a class="so" style="flex:1;cursor:default">Em breve</a>';
+  const estado = e.online
+    ? '<span class="estado"><i></i>No ar</span>'
+    : '<span class="estado local"><i></i>Ainda não publicado</span>';
 
   c.innerHTML =
     '<div class="faixa"></div>' +
