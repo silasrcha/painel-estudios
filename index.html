@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Estúdios — MR 22</title>
+<link rel="stylesheet" href="ativos/fontes/local.css">
+<style>
+  /* mesma identidade dos estúdios: paleta, hachura diagonal e a onda da marca */
+  :root{
+    --azul:#009FE3; --azul-md:#0069B3; --azul-esc:#004F9F;
+    --verde:#52AE32; --verde-esc:#008D3F; --amarelo:#FFDD00; --ambar:#FAB434;
+    --bg:#0B121E; --painel:#101A2A; --painel-alto:#16233A;
+    --linha:#1E2E47; --linha2:#2A3E5C;
+    --txt:#EAF0F7; --dim:#8296B2; --acc:var(--azul); --ok:var(--verde);
+    --r:12px;
+    --hachura:repeating-linear-gradient(135deg,#ffffff08 0 1px,transparent 1px 7px);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;background:var(--bg);background-image:var(--hachura);
+       color:var(--txt);font:14px/1.5 "Encode Sans",system-ui,sans-serif;
+       display:flex;flex-direction:column}
+
+  header{border-bottom:1px solid var(--linha);background:var(--painel);
+         background-image:var(--hachura)}
+  /* a onda da marca; discreta como no painel dos estúdios — numa tela larga
+     ela vira uma faixa longa e rouba a atenção do título se for maior */
+  header .onda{height:6px;opacity:.85;
+               background:url('ativos/marca/onda.svg') left bottom/auto 22px repeat-x}
+  header .dentro{max-width:920px;margin:0 auto;padding:26px 24px 24px;
+                 display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap}
+  h1{margin:0;font:900 27px/1 "Encode Sans Expanded","Encode Sans",sans-serif;
+     letter-spacing:-.03em;color:#fff}
+  header .sub{font:500 11px/1 "Encode Sans Condensed","Encode Sans",sans-serif;
+              letter-spacing:.16em;text-transform:uppercase;color:var(--dim);
+              padding-bottom:3px}
+
+  main{flex:1;width:100%;max-width:920px;margin:0 auto;padding:28px 24px 40px}
+  h2{margin:0 0 14px;font:600 11px/1 "Encode Sans Condensed","Encode Sans",sans-serif;
+     letter-spacing:.13em;text-transform:uppercase;color:var(--dim);
+     display:flex;align-items:center;gap:8px}
+  h2::before{content:'';width:3px;height:12px;border-radius:2px;
+             background:linear-gradient(180deg,var(--azul),var(--verde))}
+
+  .grade{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(272px,1fr))}
+
+  .cartao{position:relative;display:flex;flex-direction:column;
+          background:var(--painel);border:1px solid var(--linha);
+          border-radius:var(--r);overflow:hidden;transition:.16s}
+  .cartao:hover{border-color:var(--azul-md);transform:translateY(-2px);
+                box-shadow:0 12px 32px #0006}
+  /* a barrinha de 4 cores da marca, a mesma das listras dos cards */
+  .cartao .faixa{height:4px;flex:none;
+    background:linear-gradient(90deg,#009640 0 33%,#FFDD00 33% 58%,#fff 58% 70%,#004899 70% 100%)}
+  .cartao .corpo{padding:16px 17px 15px;display:flex;flex-direction:column;flex:1;gap:9px}
+
+  .topo{display:flex;align-items:flex-start;gap:10px}
+  /* Miniatura do que o estúdio monta: foto em cima, a barrinha de 4 cores e o
+     bloco claro embaixo. Caixa vazia parecia elemento quebrado; assim a pessoa
+     reconhece o card de longe. */
+  .formato{flex:none;width:32px;border-radius:4px;border:1px solid var(--linha2);
+    background:
+      linear-gradient(#F2F5F8,#F2F5F8) bottom/100% 29% no-repeat,
+      linear-gradient(90deg,#009640 0 33%,#FFDD00 33% 58%,#fff 58% 70%,#004899 70% 100%)
+        left 71%/100% 2px no-repeat,
+      linear-gradient(155deg,#24507A,#0C1524)}
+  .formato.p916{height:57px}                 /* 9:16 história */
+  .formato.p34{height:43px}                  /* 3:4 feed */
+  .formato.p11{height:32px}
+  .cartao h3{margin:0;font:800 17px/1.15 "Encode Sans Semi Condensed","Encode Sans",sans-serif;
+             letter-spacing:-.01em;color:#fff}
+  .medida{margin-top:3px;font:500 10.5px/1 "Encode Sans Condensed","Encode Sans",sans-serif;
+          letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+  .cartao p{margin:0;font-size:12.5px;line-height:1.55;color:#B6C2D2;flex:1}
+
+  .estado{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;
+          font:500 10.5px/1 "Encode Sans Condensed","Encode Sans",sans-serif;
+          letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+  .estado i{width:7px;height:7px;border-radius:50%;background:var(--ok)}
+  .estado.local i{background:var(--ambar)}
+
+  .acoes{display:flex;gap:7px;margin-top:2px}
+  .acoes a{flex:1;text-align:center;text-decoration:none;padding:9px 10px;border-radius:7px;
+           border:1px solid var(--linha2);background:var(--painel-alto);color:var(--txt);
+           font:600 12.5px/1.3 "Encode Sans",sans-serif;transition:.14s}
+  .acoes a:hover{background:#1D2E49;border-color:var(--azul-md)}
+  .acoes a.pri{background:var(--azul-md);border-color:var(--azul-md);color:#fff}
+  .acoes a.pri:hover{background:var(--azul);border-color:var(--azul)}
+  .acoes a.so{flex:none;padding:9px 12px;font-weight:500;color:var(--dim)}
+
+  /* cartão pontilhado: o lugar dos próximos estúdios */
+  .novo{border:1px dashed var(--linha2);background:#0C152480;border-radius:var(--r);
+        padding:17px;display:flex;flex-direction:column;justify-content:center;gap:7px;
+        min-height:160px}
+  .novo b{font:800 14px/1.2 "Encode Sans Semi Condensed","Encode Sans",sans-serif;color:var(--dim)}
+  .novo p{margin:0;font-size:12px;line-height:1.55;color:#7C8CA4}
+  .novo code{background:#0B121E;border:1px solid var(--linha);padding:1px 5px;
+             border-radius:4px;color:var(--azul);font-size:11px}
+
+  footer{border-top:1px solid var(--linha);background:#0C1524}
+  footer .dentro{max-width:920px;margin:0 auto;padding:15px 24px;
+                 font-size:11.5px;color:var(--dim);line-height:1.6}
+  footer code{background:#0B121E;border:1px solid var(--linha);padding:1px 6px;
+              border-radius:4px;color:var(--azul)}
+  footer b{color:#B6C2D2;font-weight:600}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="onda"></div>
+  <div class="dentro">
+    <h1>ESTÚDIOS</h1>
+    <span class="sub">Marcos Rogério · 22</span>
+  </div>
+</header>
+
+<main>
+  <h2>Ferramentas</h2>
+  <div class="grade" id="grade"></div>
+</main>
+
+<footer>
+  <div class="dentro">
+    Cada estúdio é publicado por conta própria; este painel é só a porta de
+    entrada. Para acrescentar um, escreva uma linha na lista <code>ESTUDIOS</code>
+    no fim do <code>index.html</code>.
+  </div>
+</footer>
+
+<script>
+/* ===========================================================
+   O REGISTRO DOS ESTÚDIOS
+
+   Cada estúdio é um deploy próprio (é assim que o de Cards já vive), e este
+   painel é a porta de entrada que aponta pra eles. Para acrescentar um novo:
+   publique-o e escreva um objeto nesta lista.
+
+     nome    como aparece no cartão
+     medida  dimensão do que ele monta
+     forma   p916 | p34 | p11 — só a miniatura do formato
+     oque    uma frase do que ele faz
+     online  endereço público. SEM isso o cartão aparece como "em breve":
+             o painel no ar não tem como abrir pasta da máquina de ninguém.
+     pasta   subpasta ao lado, para quando o painel roda local (opcional)
+   =========================================================== */
+const ESTUDIOS = [
+  {
+    nome: 'Estúdio de Cards',
+    medida: '1080 × 1920 · agenda de TV',
+    forma: 'p916',
+    oque: 'Monta os cards de agenda sobre foto, com recorte automático da ' +
+          'pessoa na frente dos cards.',
+    online: 'https://estudio-cards.vercel.app',
+    pasta: 'Estudio Cards'
+  },
+  {
+    nome: 'Estúdio de Adesivaços',
+    medida: '1080 × 1920 · adesivaço',
+    forma: 'p916',
+    oque: 'Monta o card de adesivaço sobre foto: cidade, data, horário e ' +
+          'local, com guia do corte 3:4 do feed.',
+    online: '',                       // ← cole aqui a URL quando publicar
+    pasta: 'Estudio Adesivacos'
+  }
+];
+
+/* Rodando na máquina de alguém o painel também abre a pasta ao lado; no ar,
+   só o endereço público existe. */
+const EH_LOCAL = ['localhost', '127.0.0.1', ''].includes(location.hostname);
+const grade = document.getElementById('grade');
+
+for(const e of ESTUDIOS){
+  const local = e.pasta ? '../' + encodeURIComponent(e.pasta) + '/' : '';
+  const c = document.createElement('article');
+  c.className = 'cartao';
+
+  let acoes, estado;
+  if(e.online){
+    acoes = '<a class="pri" href="' + e.online + '" target="_blank" rel="noopener">Abrir</a>' +
+            (EH_LOCAL && local ? '<a class="so" href="' + local + '">Local</a>' : '');
+    estado = '<span class="estado"><i></i>No ar</span>';
+  } else if(EH_LOCAL && local){
+    acoes = '<a class="pri" href="' + local + '">Abrir local</a>';
+    estado = '<span class="estado local"><i></i>Ainda não publicado</span>';
+  } else {
+    acoes = '<a class="so" style="flex:1;cursor:default">Em breve</a>';
+    estado = '<span class="estado local"><i></i>Ainda não publicado</span>';
+  }
+
+  c.innerHTML =
+    '<div class="faixa"></div>' +
+    '<div class="corpo">' +
+      '<div class="topo">' +
+        '<div class="formato ' + e.forma + '"></div>' +
+        '<div><h3></h3><div class="medida"></div></div>' +
+      '</div>' +
+      '<p></p>' + estado +
+      '<div class="acoes">' + acoes + '</div>' +
+    '</div>';
+
+  // nome e texto por textContent: nada de HTML vindo do registro
+  c.querySelector('h3').textContent = e.nome;
+  c.querySelector('.medida').textContent = e.medida;
+  c.querySelector('.corpo p').textContent = e.oque;
+  grade.appendChild(c);
+}
+
+const novo = document.createElement('div');
+novo.className = 'novo';
+novo.innerHTML = '<b>Próximo estúdio</b>' +
+  '<p>Publique o estúdio e escreva um objeto na lista <code>ESTUDIOS</code>, ' +
+  'no fim deste <code>index.html</code>. Ele aparece aqui na hora.</p>';
+grade.appendChild(novo);
+</script>
+</body>
+</html>
